@@ -1,0 +1,1 @@
+export const getRulesUrl = 'http://localhost:8000/api/rules';

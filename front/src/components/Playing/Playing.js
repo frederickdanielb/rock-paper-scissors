@@ -14,13 +14,10 @@ const Playing = (props) => {
         props.setCurrentMovePlayer2(event.target.value)
 
       props.setTurn(2);
-    
+
   }
   return (
     <form onSubmit={props.onPlayerChoiceClick}>
-
-
-
       <div className="form-group row">
         <div className={props.round === 3 ? "col-sm-5" : "col-sm-12"} >
           <h2>
@@ -85,8 +82,5 @@ Playing.propTypes = {
   player2: PropTypes.string,
   turn: PropTypes.number,
   setTurn: PropTypes.func
-
-
 }
-
 export default Playing;

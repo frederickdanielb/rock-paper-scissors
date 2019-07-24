@@ -42,8 +42,6 @@ InitPlayers.propTypes = {
   player2: PropTypes.string,
   setPlayer1: PropTypes.func,
   setPlayer2: PropTypes.func
-
-
 }
 
 export default InitPlayers;

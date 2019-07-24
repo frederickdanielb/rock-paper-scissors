@@ -46,6 +46,7 @@ const App = () => {
       {
         round: round,
         player: result === 'wins' ? 'P1 ' + player1 : (result === 'losses' ? 'P2' + player2 : result),
+        nameWinner: result === 'wins' ?  player1 : (result === 'losses' ?  player2 : '**none**'),
         result: result
       }
     ]);
@@ -53,31 +54,20 @@ const App = () => {
     setCurrentMovePlayer1('');
     setCurrentMovePlayer2('');
     setTurn(1);
-
     setRound(round + 1);
+    // TODO: PENDIENTE ASIGNAR GANADOR AL FINAL, NO ALCANCE :(
     event.preventDefault();
   }
   function OnPlayAgain() {
+    // the states are reset to their initial values
     setCurrentMovePlayer1('');
     setCurrentMovePlayer2('');
-
     setRound(0);
     setTurn(1);
-
     setPlayer1('');
     setPlayer2('');
     setScore([]);
   }
-  useEffect(() => {
-    applyRules();
-  }, []);
-  useEffect(() => {
-    if (ready)
-      console.log(rules, 'Set rules in state OK')
-
-    if (score.length > 0)
-      console.log(score, 'score')
-  });
 
   const OnHandleSubmit = (event) => {
     if (player1 !== '' && player2 !== '') {
@@ -87,6 +77,11 @@ const App = () => {
     }
     event.preventDefault();
   }
+
+  useEffect(() => {
+    applyRules();
+  }, []);
+
   return (
     <div className="App">
       <div className='initGame'>
@@ -130,10 +125,6 @@ const App = () => {
           </div>
         </div>
       </div>
-
-
-
-
     </div>
   );
 }

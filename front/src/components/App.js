@@ -1,15 +1,14 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { getRulesUrl } from '../services/services';
 import InitPlayers from './InitPlayers/InitPlayers';
 import Playing from "./Playing/Playing";
-import { getWinner } from '../utils';
+import EndGame from "./EndGame/EndGame";
+import getWinner from '../utils';
 const App = () => {
-  const [win, setWin] = useState('');
+  // state
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
-  const [currentGameResult, setCurrentGameResult] = useState(null);
   const [rules, setRules] = useState([]);
   const [ready, setReady] = useState(false);
   const [round, setRound] = useState(0);
@@ -18,7 +17,7 @@ const App = () => {
   const [currentMovePlayer2, setCurrentMovePlayer2] = useState('');
   const [score, setScore] = useState([]);
 
-
+  // Apply rules from server
   function applyRules() {
     fetch(getRulesUrl)
       .then(response => response.json())
@@ -26,29 +25,49 @@ const App = () => {
         setRules([response]);
         setReady(true);
       })
-      .catch(err => console.log(err.message))
+      .catch((err) => {
+        // In case the API fails, it will be configured by default
+        setRules([{
+          'rock': 'scissors',
+          'scissors': 'paper',
+          'paper': 'rock',
+        }]);
+        setReady(true);
+        console.log(err.message);
+      })
   }
+
   function onPlayerChoiceClick(event) {
     let result = '';
     if (currentMovePlayer1 !== '' && currentMovePlayer2 !== '')
       result = getWinner(currentMovePlayer1, currentMovePlayer2, rules);
     setScore([
-      ...score, 
-      { 
-        round: round, 
-        player: result === 'wins' ? player1 : (result === 'losses' ? player2 : result), 
-        result: result 
+      ...score,
+      {
+        round: round,
+        player: result === 'wins' ? 'P1 ' + player1 : (result === 'losses' ? 'P2' + player2 : result),
+        result: result
       }
-      ]);
+    ]);
 
     setCurrentMovePlayer1('');
     setCurrentMovePlayer2('');
     setTurn(1);
-    if (round < 3)
-      setRound(round + 1);
+
+    setRound(round + 1);
     event.preventDefault();
   }
+  function OnPlayAgain() {
+    setCurrentMovePlayer1('');
+    setCurrentMovePlayer2('');
 
+    setRound(0);
+    setTurn(1);
+
+    setPlayer1('');
+    setPlayer2('');
+    setScore([]);
+  }
   useEffect(() => {
     applyRules();
   }, []);
@@ -87,7 +106,7 @@ const App = () => {
                 OnHandleSubmit={OnHandleSubmit}
               />
             )}
-            {ready && round >0 && round <= 3&& (
+            {ready && round > 0 && round <= 3 && (
               <Playing
                 player1={player1}
                 player2={player2}
@@ -100,6 +119,12 @@ const App = () => {
                 setCurrentMovePlayer2={setCurrentMovePlayer2}
                 round={round}
                 score={score}
+              />
+            )}
+            {ready && round > 3 && (
+              <EndGame
+                winner={player1}
+                OnPlayAgain={OnPlayAgain}
               />
             )}
           </div>

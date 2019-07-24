@@ -22,6 +22,7 @@ ____________________
 3.Para desplegar el api navega hasta la carpeta api y ejecuta los siguientes comandos en un terminal unix **npm install** seguido de **npm start**
 
 4.Luego dirigete al navegador web de preferencia y despliega en localhost y el puerto señalado en el **npm start** anterior.
+
 5. Si todo anda bien tendras el juego andando y consumiendo el api que despliega la configuracion inicial.
 
 Saludos...
